@@ -1,8 +1,14 @@
 require 'oystercard'
 
 describe Oystercard do
-  it 'fresh card has a balance of 0' do
-    expect(subject.balance).to eq(0)
+  describe 'fresh card' do 
+    it 'has a balance of 0' do
+      expect(subject.balance).to eq(0)
+    end
+
+    it 'is not in_journey' do
+      expect(subject.in_journey?).to eq(false)
+    end
   end
 
   describe '#top_up' do
@@ -23,8 +29,24 @@ describe Oystercard do
       subject.top_up(90)
       expect { subject.deduct(50) }.to change { subject.balance }.by(-50)
     end
-
   end
 
+  describe 'on journey' do
+    before(:each) do
+      subject.touch_in
+    end
 
+    describe '#touch_in' do
+      it 'changes in journey to be true' do        
+        expect(subject).to be_in_journey
+      end
+    end
+
+    describe '#touch_out' do
+      it 'changes in journey to be false' do        
+        subject.touch_out
+        expect(subject).not_to be_in_journey
+      end
+    end
+  end
 end

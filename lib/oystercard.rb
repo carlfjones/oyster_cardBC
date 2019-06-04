@@ -6,10 +6,13 @@ class Oystercard
     @balance = 0
   end
 
-  def top_up(amount)    
-    raise "Max balance allowed is £#{LIMIT}" if (@balance + amount) > LIMIT       
+  def top_up(amount)
+    raise "Max balance allowed is £#{LIMIT}" if (@balance + amount) > LIMIT
     @balance += amount
-    
+  end
+
+  def deduct(amount)
+    @balance -= amount
   end
 
 end

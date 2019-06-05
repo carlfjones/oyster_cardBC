@@ -33,20 +33,26 @@ describe Oystercard do
 
   describe 'on journey' do
 
+    let(:station){ double :station }
+
     describe '#touch_in' do
       it 'throws error if card has insufficient balance' do
-        expect{ subject.touch_in }.to raise_error('Insufficient balance') if subject.balance < Oystercard::MINIMUM
+        expect{ subject.touch_in(station) }.to raise_error('Insufficient balance') if subject.balance < Oystercard::MINIMUM
       end
     end
 
     before(:each) do
       subject.top_up(5)
-      subject.touch_in
+      subject.touch_in(station)
     end
 
     describe '#touch_in' do
       it 'changes in journey to be true' do
         expect(subject).to be_in_journey
+      end
+
+      it 'remembers the entry station after touching in' do
+        expect(subject.entry_station).to eq station
       end
     end
 

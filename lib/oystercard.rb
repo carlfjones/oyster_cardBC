@@ -17,10 +17,6 @@ class Oystercard
     @balance += amount
   end
 
-  def deduct(amount)
-    @balance -= amount
-  end
-
   def in_journey?
     !!@entry_station
   end
@@ -33,7 +29,14 @@ class Oystercard
 
   def touch_out
     #@in_journey = false
+    deduct(MINIMUM)
     @entry_station = nil
+  end
+
+  private
+
+  def deduct(amount)
+    @balance -= amount
   end
 
 end

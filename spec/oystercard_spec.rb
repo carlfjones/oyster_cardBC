@@ -4,6 +4,10 @@ describe Oystercard do
 
   describe 'fresh card' do
 
+    it 'tests that journeys is empty when initialized' do
+      expect(subject.journeys).to eq([])
+    end
+
     it 'has a balance of 0' do
       expect(subject.balance).to eq(0)
     end
@@ -59,23 +63,27 @@ describe Oystercard do
         expect(subject).to be_in_journey
       end
 
-      it 'remembers the entry station after touching in' do
-        expect(subject.entry_station).to eq station
-      end
     end
 
     describe '#touch_out' do
 
       it 'deducts fare from card balance when touch out' do
-        expect { subject.touch_out }.to change { subject.balance }.by(-minimum)
+        expect { subject.touch_out(station) }.to change { subject.balance }.by(-minimum)
       end
 
       # do we still need this test as we no longer have the in_journey variable?
       # should we update to test the entry_station variable?
       # or is it still working and linking to the in_journey? method?
       it 'changes in journey to be false' do
-        subject.touch_out
+        subject.touch_out(station)
         expect(subject).not_to be_in_journey
+      end
+
+      it 'stores a journey as a hash after touch in and touch out' do
+        subject.top_up(20)
+        subject.touch_in(station)
+        subject.touch_out(station)
+        expect(subject.journeys).to eq([{in_station: station, out_station: station}])
       end
     end
   end
